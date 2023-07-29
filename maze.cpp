@@ -127,7 +127,7 @@ void Maze::init_maze()
             {
                 continue;
             }
-            grid->at(cur.r, cur.c).mark_going(d);
+            grid->at(cur.c, cur.r).mark_going(d);
             target.mark_coming(d);
             path.push(try_direction);
         }

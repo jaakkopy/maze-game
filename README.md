@@ -1,0 +1,2 @@
+- A small maze game made with [Raylib](https://www.raylib.com/).
+- The maze is generated with a random depth-first search

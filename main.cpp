@@ -19,7 +19,7 @@ int main(void)
     SetTargetFPS(60);
     while (!WindowShouldClose())
     {
-        player.update();
+        player.update(maze);
         BeginDrawing();
         ClearBackground(WHITE);
         draw_maze(maze);

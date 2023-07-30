@@ -3,6 +3,7 @@
 #include <vector>
 #include <time.h>
 #include <stdlib.h>
+#include <iostream>
 #include "maze.hpp"
 
 VisitationLabel::VisitationLabel(bool up, bool down, bool left, bool right)
@@ -16,25 +17,6 @@ VisitationLabel::VisitationLabel(bool up, bool down, bool left, bool right)
 bool VisitationLabel::is_visited()
 {
     return up || down || left || right;
-}
-
-void VisitationLabel::mark_coming(Direction visitor_came_from)
-{
-    switch (visitor_came_from)
-    {
-    case UP:
-        down = true;
-        break;
-    case DOWN:
-        up = true;
-        break;
-    case LEFT:
-        right = true;
-        break;
-    case RIGHT:
-        left = true;
-        break;
-    }
 }
 
 void VisitationLabel::mark_going(Direction going_to)
@@ -52,6 +34,26 @@ void VisitationLabel::mark_going(Direction going_to)
         break;
     case RIGHT:
         right = true;
+        break;
+    }
+}
+
+void VisitationLabel::mark_coming(Direction visitors_direction)
+{
+    // Visitor is going to certain direction, meaning the opposite direction's path is open from the perspective of the target cell 
+    switch (visitors_direction)
+    {
+    case UP:
+        down = true;
+        break;
+    case DOWN:
+        up = true;
+        break;
+    case LEFT:
+        right = true;
+        break;
+    case RIGHT:
+        left = true;
         break;
     }
 }
@@ -107,7 +109,6 @@ void Maze::init_maze()
     srand(time(NULL));
     std::stack<RC> path;
     RC start(cells_y - 1, cells_x / 2); // The starting position is the bottom middle cell
-    grid->at(cells_y - 1, cells_x / 2).down = true;
     std::vector<Direction> directions = {UP, DOWN, LEFT, RIGHT}; // used to randomly choose the path with shuffle
     path.push(start);
     while (!path.empty())
@@ -117,12 +118,12 @@ void Maze::init_maze()
         std::random_shuffle(directions.begin(), directions.end());
         for (auto d : directions)
         {
-            RC try_direction = position_by_direction(cur, d);
+            const RC try_direction = position_by_direction(cur, d);
             if (!in_bounds(try_direction.c, try_direction.r))
             {
                 continue;
             }
-            VisitationLabel &target = grid->at(try_direction.r, try_direction.c);
+            VisitationLabel &target = grid->at(try_direction.c, try_direction.r);
             if (target.is_visited())
             {
                 continue;
@@ -134,12 +135,45 @@ void Maze::init_maze()
     }
 }
 
-VisitationLabel Maze::get_grid_value_at(int r, int c) const
+const VisitationLabel &Maze::get_grid_value_at(int r, int c) const
 {
     return grid->at(c, r);
 }
 
-bool Maze::in_bounds(int c, int r)
+
+// TODO: miksei toimi?? Ei taida tunnistaa polkua oikein...
+bool Maze::has_hit_wall(float x, float y) const
+{
+    // get the cell corresponding to these coordinates    
+    int cell_col = x / cell_w;
+    int cell_row = y / cell_h;
+    if (!in_bounds(cell_col, cell_row)) {
+        return true;
+    }
+    const VisitationLabel &label = grid->at(cell_col, cell_row); 
+
+    bool has_left_wall  = !label.left;
+    bool has_right_wall = !label.right;
+    bool has_upper_wall = !label.up;
+    bool has_lower_wall = !label.down;
+
+    std::cout << "(" << cell_col << ", " << cell_row << ")" << ", HAS WALL UP: " << has_upper_wall << " HAS WALL DOWN: " << has_lower_wall << " HAS WALL LEFT: " << has_left_wall << " HAS WALL RIGHT: " << has_right_wall << std::endl;
+
+    // check which wall of the cell the coordinates would correspond to, if any
+    float cell_upper_y = (float)cell_row * cell_h;
+    float cell_lower_y = (float)(cell_row + 1) * cell_h;
+    float cell_left_x  = (float)cell_col * cell_w;
+    float cell_right_x = (float)(cell_col + 1) * cell_w;
+
+    bool has_hit_left  = (x <= cell_left_x)  && has_left_wall;
+    bool has_hit_right = (x >= cell_right_x) && has_right_wall;
+    bool has_hit_lower = (y >= cell_lower_y) && has_lower_wall;
+    bool has_hit_upper = (y <= cell_upper_y) && has_upper_wall;
+
+    return has_hit_left || has_hit_right || has_hit_lower || has_hit_upper;
+}
+
+bool Maze::in_bounds(int c, int r) const
 {
     return (c >= 0 && c < cells_x) && (r >= 0 && r < cells_y);
 }

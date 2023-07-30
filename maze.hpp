@@ -12,7 +12,7 @@ typedef enum Direction
     RIGHT
 } Direction;
 
-// Indicates which directions are visited from this cell
+// Indicates which directions are open from this cell 
 typedef struct VisitationLabel
 {
     bool up = false;
@@ -21,7 +21,7 @@ typedef struct VisitationLabel
     bool right = false;
     VisitationLabel(bool up = false, bool down = false, bool left = false, bool right = false);
     bool is_visited();
-    void mark_coming(Direction visitor_came_from);
+    void mark_coming(Direction visitors_direction);
     void mark_going(Direction going_to);
 } VisitationLabel;
 
@@ -35,10 +35,11 @@ public:
     int get_cells_y() const { return cells_y; };
     int get_cell_width() const { return cell_w; };
     int get_cell_height() const { return cell_h; };
-    VisitationLabel get_grid_value_at(int r, int c) const;
+    const VisitationLabel &get_grid_value_at(int r, int c) const;
+    bool has_hit_wall(float x, float y) const;
 private:
     std::unique_ptr<Grid<VisitationLabel>> grid;
-    bool in_bounds(int c, int r);
+    bool in_bounds(int c, int r) const;
     int screen_w;
     int screen_h;
     int cells_x;

@@ -28,9 +28,9 @@ void draw_maze(const Maze &maze)
     {
         for (int c = 0; c < cells_x; ++c)
         {
-            Vector2 upper_left = (Vector2){(float)c * cell_width, (float)r * cell_height};
-            Vector2 upper_right = (Vector2){(float)(c + 1) * cell_width, (float)r * cell_height};
-            Vector2 bottom_left = (Vector2){(float)c * cell_width, (float)(r + 1) * cell_height};
+            Vector2 upper_left   = (Vector2){(float) c      * cell_width, (float) r      * cell_height};
+            Vector2 upper_right  = (Vector2){(float)(c + 1) * cell_width, (float) r      * cell_height};
+            Vector2 bottom_left  = (Vector2){(float) c      * cell_width, (float)(r + 1) * cell_height};
             Vector2 bottom_right = (Vector2){(float)(c + 1) * cell_width, (float)(r + 1) * cell_height};
             const VisitationLabel &v = maze.get_grid_value_at(r, c);
             if (v.up)

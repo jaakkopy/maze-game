@@ -5,6 +5,7 @@
 #include "maze.hpp"
 #include "player.hpp"
 #include "draw.hpp"
+#include <unistd.h>
 
 int main(void)
 {

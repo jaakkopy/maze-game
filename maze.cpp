@@ -89,10 +89,10 @@ RC position_by_direction(const RC &rc, Direction dir)
     switch (dir)
     {
     case UP:
-        r = 1;
+        r = -1;
         break;
     case DOWN:
-        r = -1;
+        r = 1;
         break;
     case LEFT:
         c = -1;
@@ -128,7 +128,8 @@ void Maze::init_maze()
             {
                 continue;
             }
-            grid->at(cur.c, cur.r).mark_going(d);
+            VisitationLabel &current_label = grid->at(cur.c, cur.r);
+            current_label.mark_going(d);
             target.mark_coming(d);
             path.push(try_direction);
         }
@@ -157,12 +158,12 @@ bool Maze::has_hit_wall(float x, float y) const
     bool has_upper_wall = !label.up;
     bool has_lower_wall = !label.down;
 
-    std::cout << "(" << cell_col << ", " << cell_row << ")" << ", HAS WALL UP: " << has_upper_wall << " HAS WALL DOWN: " << has_lower_wall << " HAS WALL LEFT: " << has_left_wall << " HAS WALL RIGHT: " << has_right_wall << std::endl;
+    //std::cout << "(" << cell_col << ", " << cell_row << ")" << ", HAS WALL UP: " << has_upper_wall << " HAS WALL DOWN: " << has_lower_wall << " HAS WALL LEFT: " << has_left_wall << " HAS WALL RIGHT: " << has_right_wall << std::endl;
 
     // check which wall of the cell the coordinates would correspond to, if any
-    float cell_upper_y = (float)cell_row * cell_h;
+    float cell_upper_y = (float) cell_row      * cell_h;
     float cell_lower_y = (float)(cell_row + 1) * cell_h;
-    float cell_left_x  = (float)cell_col * cell_w;
+    float cell_left_x  = (float) cell_col      * cell_w;
     float cell_right_x = (float)(cell_col + 1) * cell_w;
 
     bool has_hit_left  = (x <= cell_left_x)  && has_left_wall;

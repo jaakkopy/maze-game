@@ -14,7 +14,7 @@ int main(void)
     const int amount_cells_horizontal = 20;
     const int amount_cells_vertical = 20;
     Maze maze(screen_w, screen_h, amount_cells_horizontal, amount_cells_vertical);
-    Player player(3.0f, screen_w / 2, screen_h - 15);
+    Player player(3.0f, screen_w / 2, screen_h - 15, 12.0f);
     maze.init_maze();
     InitWindow(screen_w, screen_h, "maze");
     SetTargetFPS(60);

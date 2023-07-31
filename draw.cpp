@@ -54,5 +54,5 @@ void draw_maze(const Maze &maze)
 }
 
 void draw_player(const Player &player) {
-    DrawCircleV(player.get_position(), 15, BLUE);
+    DrawCircleV(player.get_position(), player.get_radius(), BLUE);
 }

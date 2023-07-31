@@ -142,8 +142,7 @@ const VisitationLabel &Maze::get_grid_value_at(int r, int c) const
 }
 
 
-// TODO: miksei toimi?? Ei taida tunnistaa polkua oikein...
-bool Maze::has_hit_wall(float x, float y) const
+bool Maze::has_hit_wall(float x, float y, float radius) const
 {
     // get the cell corresponding to these coordinates    
     int cell_col = x / cell_w;
@@ -158,18 +157,16 @@ bool Maze::has_hit_wall(float x, float y) const
     bool has_upper_wall = !label.up;
     bool has_lower_wall = !label.down;
 
-    //std::cout << "(" << cell_col << ", " << cell_row << ")" << ", HAS WALL UP: " << has_upper_wall << " HAS WALL DOWN: " << has_lower_wall << " HAS WALL LEFT: " << has_left_wall << " HAS WALL RIGHT: " << has_right_wall << std::endl;
-
     // check which wall of the cell the coordinates would correspond to, if any
     float cell_upper_y = (float) cell_row      * cell_h;
     float cell_lower_y = (float)(cell_row + 1) * cell_h;
     float cell_left_x  = (float) cell_col      * cell_w;
     float cell_right_x = (float)(cell_col + 1) * cell_w;
 
-    bool has_hit_left  = (x <= cell_left_x)  && has_left_wall;
-    bool has_hit_right = (x >= cell_right_x) && has_right_wall;
-    bool has_hit_lower = (y >= cell_lower_y) && has_lower_wall;
-    bool has_hit_upper = (y <= cell_upper_y) && has_upper_wall;
+    bool has_hit_left  = (x-radius <= cell_left_x)  && has_left_wall;
+    bool has_hit_right = (x+radius >= cell_right_x) && has_right_wall;
+    bool has_hit_lower = (y+radius >= cell_lower_y) && has_lower_wall;
+    bool has_hit_upper = (y-radius <= cell_upper_y) && has_upper_wall;
 
     return has_hit_left || has_hit_right || has_hit_lower || has_hit_upper;
 }

@@ -36,7 +36,7 @@ public:
     int get_cell_width() const { return cell_w; };
     int get_cell_height() const { return cell_h; };
     const VisitationLabel &get_grid_value_at(int r, int c) const;
-    bool has_hit_wall(float x, float y) const;
+    bool has_hit_wall(float x, float y, float radius) const;
 private:
     std::unique_ptr<Grid<VisitationLabel>> grid;
     bool in_bounds(int c, int r) const;

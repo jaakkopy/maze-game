@@ -4,10 +4,13 @@
 #include <vector>
 
 template <typename T>
-class Grid {
+class Grid
+{
 public:
-    Grid(int cols, int rows);    
+    Grid(int cols, int rows);
     T &at(int c, int r);
+    bool is_in_bounds(int c, int r) const;
+
 private:
     int cols;
     int rows;
@@ -23,9 +26,15 @@ inline Grid<T>::Grid(int cols, int rows)
 }
 
 template <typename T>
-T& Grid<T>::at(int c, int r)
+T &Grid<T>::at(int c, int r)
 {
     return this->cells.at(r * cols + c);
+}
+
+template <typename T>
+inline bool Grid<T>::is_in_bounds(int c, int r) const
+{
+    return (c >= 0 && c < cols) && (r >= 0 && r < rows);
 }
 
 #endif

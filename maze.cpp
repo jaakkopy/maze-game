@@ -165,24 +165,44 @@ const CellLabel &Maze::get_grid_value_at(int r, int c) const
     return grid->at(c, r);
 }
 
-void Maze::mark_collected(float x, float y)
-{
-}
-
-bool Maze::has_collected_collectable(float x, float y, float radius) const
+bool Maze::has_reached_exit(float x, float y) const
 {
     int cell_col = x / cell_w;
     int cell_row = y / cell_h;
     if (!grid->is_in_bounds(cell_col, cell_row))
     {
-        return true;
+        return false;
+    }
+    CellLabel &label = grid->at(cell_col, cell_row);
+    return label.is_exit;
+}
+
+void Maze::remove_collectable(float x, float y)
+{
+    int cell_col = x / cell_w;
+    int cell_row = y / cell_h;
+    if (!grid->is_in_bounds(cell_col, cell_row))
+    {
+        return;
+    }
+    CellLabel &label = grid->at(cell_col, cell_row);
+    label.has_collectable = false;
+}
+
+bool Maze::has_collected_collectable(float x, float y) const
+{
+    int cell_col = x / cell_w;
+    int cell_row = y / cell_h;
+    if (!grid->is_in_bounds(cell_col, cell_row))
+    {
+        return false;
     }
     const CellLabel &label = grid->at(cell_col, cell_row);
     if (!label.has_collectable)
     {
         return false;
     }
-    return false;
+    return true;
 }
 
 bool Maze::has_hit_wall(float x, float y, float radius) const

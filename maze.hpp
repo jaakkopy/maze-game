@@ -38,8 +38,9 @@ public:
     int get_cell_height() const { return cell_h; };
     const CellLabel &get_grid_value_at(int r, int c) const;
     bool has_hit_wall(float x, float y, float radius) const;
-    bool has_collected_collectable(float x, float y, float radius) const;
-    void mark_collected(float x, float y);
+    bool has_collected_collectable(float x, float y) const;
+    bool has_reached_exit(float x, float y) const;
+    void remove_collectable(float x, float y);
 
 private:
     std::unique_ptr<Grid<CellLabel>> grid;
